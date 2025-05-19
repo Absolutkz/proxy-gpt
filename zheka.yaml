@@ -1,0 +1,89 @@
+openapi: 3.1.0
+info:
+  title: ЖЭКА API
+  description: >
+    Прокси-доступ к госресурсам для GPT-агента "ЖЭКА" — ЖКХ, нормативные акты, обращения и проверки.
+  version: 1.0.0
+
+servers:
+  - url: https://proxy-hql5ykiky-elenas-projects-46dea8ad.vercel.app/api/proxy
+    description: Основной прокси-сервер (Vercel)
+
+paths:
+  /law:
+    post:
+      operationId: getLawTextProxy
+      summary: Получение текста НПА (adilet)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  example: https://adilet.zan.kz/rus/docs/CONSTITUTION
+                method:
+                  type: string
+                  example: GET
+      responses:
+        '200':
+          description: HTML-документ с текстом закона
+
+  /eotinish:
+    post:
+      operationId: sendEotinishRequest
+      summary: Отправка обращения через eotinish.kz (эмуляция)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  example: https://eotinish.kz/api/request
+                method:
+                  type: string
+                  example: POST
+                body:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    iin:
+                      type: string
+                    text:
+                      type: string
+      responses:
+        '200':
+          description: Ответ от eotinish.kz (симулированный)
+
+  /egov-check:
+    post:
+      operationId: checkEgovService
+      summary: Проверка статуса заявки на egov.kz
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  example: https://egov.kz/services/check
+                method:
+                  type: string
+                  example: POST
+                body:
+                  type: object
+                  properties:
+                    requestId:
+                      type: string
+                      example: "ABC123456"
+      responses:
+        '200':
+          description: Ответ от egov.kz (симулированный)
